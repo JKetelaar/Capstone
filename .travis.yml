@@ -9,6 +9,11 @@ services:
 php:
     - 7.2
 
+# Adding custom domains
+addons:
+    hosts:
+        - db.dockit.site
+
 # Update composer
 before-install:
     - composer self-update
