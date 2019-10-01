@@ -21,6 +21,17 @@ cache:
 
 # Update composer
 before_install:
+    # Docker Compose Install
+    - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    - chmod +x docker-compose
+    - sudo mv docker-compose /usr/local/bin
+    
+    # Download and install Docker libs
+    - curl -L https://github.com/Ortus-Solutions/docker-buildfiles/archive/master.zip > docker.zip
+    - unzip docker.zip -d workbench
+    - mv workbench/docker-buildfiles-master workbench/docker
+
+    # Application installation
     - composer self-update
     - docker-compose -f .docker/docker-compose.yml build
     - docker-compose -f .docker/docker-compose.yml up -d
