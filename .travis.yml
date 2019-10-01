@@ -11,7 +11,8 @@ php:
 
 # Update composer
 before-install:
-    - docker-compose -f .docker/docker-compose.yml
+    - composer self-update
+    - docker-compose -f .docker/docker-compose.yml up -d
 
 # Install composer dependencies,
 # Create database, schema and fixtures
