@@ -7,7 +7,6 @@ services:
 
 # Settings version PHP
 php:
-    - 7.1
     - 7.2
 
 # Update composer
