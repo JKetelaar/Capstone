@@ -30,6 +30,9 @@ before_install:
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
 
+    # Ensuring MySQL doesn't run
+    - sudo service mysql stop
+
     # Application installation
     - composer self-update
     - docker-compose -f .docker/docker-compose.yml build
