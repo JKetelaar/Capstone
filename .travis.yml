@@ -9,6 +9,9 @@ services:
 php:
     - 7.2
 
+env:
+    - DOCKER_COMPOSE_VERSION=1.4.2
+
 # Adding custom domains
 addons:
     hosts:
