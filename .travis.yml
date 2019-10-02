@@ -10,9 +10,8 @@ php:
     - 7.2
 
 env:
-    - DOCKER_COMPOSE_VERSION=1.24.1
-    global:
-        secure: "tobIHhV+uEyktN2JstEMOyNzOyJd/RP0a61Lol0PN8j6GJHdemtxW70ei2DexCGf8QBfHwEG/PIiDXfEtswrP9X7SNZvlrnJKFTdsX0+czZKzXNKuY7tDNzm9DNTGkuHFIh2hlWLI+1Dw5UkDihK+3usdQPyzd4IXwVewETOHgG5Ml6puFZEWVWhhuAUNYKVzNcSfGEInWF+tGjSaXMuxnmEvAq74f75Aa8er1Ewp49f8YLLxrd+eL/RFl/qEHIqFzA0rkcBgHB7db9oDtp1WHL34cCNz6PsLYSLL3Q92B7wI/ZJYTEqJPx7Q3mriQo08iyTXYQSmVOOF0AYy8Wk9Z7BkDXn5OAgSY5SMEAhr+7NH+4bX1xjvNBAUGrzweBa+x7+SxmqV54/lSzJtk+TQHuOdwpOR6wiVoEhUTGnuN+2ThcAa462cayQWLnhgD9t1G7IKZacXXxlXld52WbNp4UtkCXCCPPUtmoSE6oE63q3y3fVh+D1s7NTdcxb4PDD/tmehRnWcUicYmls2llOZag1L/pvboPFe3pp6f9SjykhlZk//5ySq1slOcHUMLnK1Ow6ALTQaHKslQcdcHPI8m2lieDpk5l1pDwDP6Gk8SS2IO6Odbe30BjKYVIBlOHMUmlF85Q1t+QM6dnd5gO9yTQn2p+g++PPRx/Pi0LmVIs="
+    matrix:
+        - DOCKER_COMPOSE_VERSION=1.24.1
 
 # Adding custom domains
 addons:
@@ -57,4 +56,5 @@ after_script:
     - docker-compose -f .docker/docker-compose.yml rm -f
 
 notifications:
-    slack: uwlax-capstone-se:cnXhk8tLmUcwGPvp8LYDzpOI
+    slack:
+        secure: Q73x7KSb+edrHXAUrAKF8mDv/gcBHRyjyqdKwJVAOc7PlpdRxqoQOAZzogUQ+IcJTlgZKsjWt+YxB2bJvdSv8C4IlT7snMdTimit4O7ZT30gl2ZPprnzroO7IeRCN50ozffAzxiYb0NUY4J0OYXaKaRD0Lpz0HQ9wIBmxoyOOM0Hlg1egYApyJfEqMWfsDLQg4YarG71es2yiDCj8f1CPoAXgFMHbrOVeLHw6TcFBRV11Orp5Jwdt/gFZZ3jzqMjp6Ix5hByLpK8jRv88hz+vakdVnMYUbnXeSaFQ0oJxwd7ZOC+wObbsI1IVWH62DuHHhG6s6JPCfDllkGQ7W5WOIr6E3tPzW2lj2e37OOAxCHSYnCqcJ/yto/LJM5vJ/JDfZ1JFjaNLnF1jMq3Mkn5VDuq24+iU1r4RbvRzCMc4v6Xo6JoBhEqWaKpWHL33Q7mI0QfkymjJf9YD2iHcjuwvOSdtMpEgI/zEQYXO0ycD4+wVRvxThPExm+dF3Z9BTqWavQxh+G0mFoteT0vO6ce33w2priY8+o2dxDLzA7JscI0CTBc/6KAvfME1hmxnUZkHjKZGqGtK79qI3/jhNpvHNGxX6G9AhZuFuoe+jig0vpKWsrOxXkzb4D6wCvweLY24kXHqliN0+p5SKLo9RcY6eFc9M3kGlG9myOnFGkDZWU=
