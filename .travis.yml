@@ -11,6 +11,8 @@ php:
 
 env:
     - DOCKER_COMPOSE_VERSION=1.24.1
+    global:
+        secure: "tobIHhV+uEyktN2JstEMOyNzOyJd/RP0a61Lol0PN8j6GJHdemtxW70ei2DexCGf8QBfHwEG/PIiDXfEtswrP9X7SNZvlrnJKFTdsX0+czZKzXNKuY7tDNzm9DNTGkuHFIh2hlWLI+1Dw5UkDihK+3usdQPyzd4IXwVewETOHgG5Ml6puFZEWVWhhuAUNYKVzNcSfGEInWF+tGjSaXMuxnmEvAq74f75Aa8er1Ewp49f8YLLxrd+eL/RFl/qEHIqFzA0rkcBgHB7db9oDtp1WHL34cCNz6PsLYSLL3Q92B7wI/ZJYTEqJPx7Q3mriQo08iyTXYQSmVOOF0AYy8Wk9Z7BkDXn5OAgSY5SMEAhr+7NH+4bX1xjvNBAUGrzweBa+x7+SxmqV54/lSzJtk+TQHuOdwpOR6wiVoEhUTGnuN+2ThcAa462cayQWLnhgD9t1G7IKZacXXxlXld52WbNp4UtkCXCCPPUtmoSE6oE63q3y3fVh+D1s7NTdcxb4PDD/tmehRnWcUicYmls2llOZag1L/pvboPFe3pp6f9SjykhlZk//5ySq1slOcHUMLnK1Ow6ALTQaHKslQcdcHPI8m2lieDpk5l1pDwDP6Gk8SS2IO6Odbe30BjKYVIBlOHMUmlF85Q1t+QM6dnd5gO9yTQn2p+g++PPRx/Pi0LmVIs="
 
 # Adding custom domains
 addons:
@@ -53,3 +55,6 @@ script:
 after_script:
     - docker-compose -f .docker/docker-compose.yml stop
     - docker-compose -f .docker/docker-compose.yml rm -f
+
+notifications:
+    slack: uwlax-capstone-se:cnXhk8tLmUcwGPvp8LYDzpOI

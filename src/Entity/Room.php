@@ -31,7 +31,7 @@ class Room
     private $floor;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Table", mappedBy="room")
+     * @ORM\OneToMany(targetEntity="BookingTable", mappedBy="room")
      */
     private $tables;
 
@@ -82,14 +82,14 @@ class Room
     }
 
     /**
-     * @return Collection|Table[]
+     * @return Collection|BookingTable[]
      */
     public function getTables(): Collection
     {
         return $this->tables;
     }
 
-    public function addTable(Table $table): self
+    public function addTable(BookingTable $table): self
     {
         if (!$this->tables->contains($table)) {
             $this->tables[] = $table;
@@ -99,7 +99,7 @@ class Room
         return $this;
     }
 
-    public function removeTable(Table $table): self
+    public function removeTable(BookingTable $table): self
     {
         if ($this->tables->contains($table)) {
             $this->tables->removeElement($table);
