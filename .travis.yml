@@ -1,0 +1,60 @@
+# Project language
+language: php
+
+# Start mysql service
+services:
+    - docker
+
+# Settings version PHP
+php:
+    - 7.2
+
+env:
+    matrix:
+        - DOCKER_COMPOSE_VERSION=1.24.1
+
+# Adding custom domains
+addons:
+    hosts:
+        - db.dockit.site
+
+# Cache composer packages so "composer install" is faster
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+
+# Update composer
+before_install:
+    # Docker Compose Install
+    - sudo rm /usr/local/bin/docker-compose
+    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    - chmod +x docker-compose
+    - sudo mv docker-compose /usr/local/bin
+
+    # Ensuring MySQL doesn't run
+    - sudo service mysql stop
+
+    # Application installation
+    - composer self-update
+    - docker-compose -f .docker/docker-compose.yml build
+    - docker-compose -f .docker/docker-compose.yml up -d
+    - sleep 60 # Wait for containers to start
+
+# Install composer dependencies,
+# Create database, schema and fixtures
+install:
+    - composer install
+
+# Run script
+script:
+    - php bin/console doctrine:migrations:migrate -n --env=test
+    - php bin/console doctrine:schema:validate
+
+# Run after script, regardless of the outcome of the tests
+after_script:
+    - docker-compose -f .docker/docker-compose.yml stop
+    - docker-compose -f .docker/docker-compose.yml rm -f
+
+notifications:
+    slack:
+        secure: Q73x7KSb+edrHXAUrAKF8mDv/gcBHRyjyqdKwJVAOc7PlpdRxqoQOAZzogUQ+IcJTlgZKsjWt+YxB2bJvdSv8C4IlT7snMdTimit4O7ZT30gl2ZPprnzroO7IeRCN50ozffAzxiYb0NUY4J0OYXaKaRD0Lpz0HQ9wIBmxoyOOM0Hlg1egYApyJfEqMWfsDLQg4YarG71es2yiDCj8f1CPoAXgFMHbrOVeLHw6TcFBRV11Orp5Jwdt/gFZZ3jzqMjp6Ix5hByLpK8jRv88hz+vakdVnMYUbnXeSaFQ0oJxwd7ZOC+wObbsI1IVWH62DuHHhG6s6JPCfDllkGQ7W5WOIr6E3tPzW2lj2e37OOAxCHSYnCqcJ/yto/LJM5vJ/JDfZ1JFjaNLnF1jMq3Mkn5VDuq24+iU1r4RbvRzCMc4v6Xo6JoBhEqWaKpWHL33Q7mI0QfkymjJf9YD2iHcjuwvOSdtMpEgI/zEQYXO0ycD4+wVRvxThPExm+dF3Z9BTqWavQxh+G0mFoteT0vO6ce33w2priY8+o2dxDLzA7JscI0CTBc/6KAvfME1hmxnUZkHjKZGqGtK79qI3/jhNpvHNGxX6G9AhZuFuoe+jig0vpKWsrOxXkzb4D6wCvweLY24kXHqliN0+p5SKLo9RcY6eFc9M3kGlG9myOnFGkDZWU=
