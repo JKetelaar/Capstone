@@ -17,7 +17,7 @@ class Chair
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Table", inversedBy="chairs")
+     * @ORM\ManyToOne(targetEntity="BookingTable", inversedBy="chairs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $ChairTable;
@@ -27,12 +27,12 @@ class Chair
         return $this->id;
     }
 
-    public function getChairTable(): ?Table
+    public function getChairTable(): ?BookingTable
     {
         return $this->ChairTable;
     }
 
-    public function setChairTable(?Table $ChairTable): self
+    public function setChairTable(?BookingTable $ChairTable): self
     {
         $this->ChairTable = $ChairTable;
 

@@ -22,7 +22,7 @@ services:
             - ./../:/var/www/symfony:cached
 
     symfony_db:
-        image: mariadb/server:10.3
+        image: mariadb/server:10.2
         ports:
             - "3306:3306"
         environment:

@@ -25,7 +25,7 @@ class Booking
     private $room;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Table", inversedBy="bookings")
+     * @ORM\ManyToOne(targetEntity="BookingTable", inversedBy="bookings")
      */
     private $tableBooking;
 
@@ -78,12 +78,12 @@ class Booking
         return $this;
     }
 
-    public function getTableBooking(): ?Table
+    public function getTableBooking(): ?BookingTable
     {
         return $this->tableBooking;
     }
 
-    public function setTableBooking(?Table $tableBooking): self
+    public function setTableBooking(?BookingTable $tableBooking): self
     {
         $this->tableBooking = $tableBooking;
 
