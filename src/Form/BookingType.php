@@ -33,7 +33,15 @@ class BookingType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add('user')
+            ->add(
+                'user',
+                EntityType::class,
+                [
+                    'class' => User::class,
+                    'disabled' => true,
+                    'data' => ''
+                ]
+            )
             ->add(
                 'invitees',
                 EntityType::class,
