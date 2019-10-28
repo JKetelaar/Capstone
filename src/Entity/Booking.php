@@ -59,6 +59,8 @@ class Booking
     {
         $this->invitees = new ArrayCollection();
         $this->suggestedTimes = new ArrayCollection();
+
+        $this->creationDate = new \DateTime();
     }
 
     public function getId(): ?int
