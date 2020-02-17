@@ -2,11 +2,13 @@
 
 namespace App\Entity\Booking;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Booking;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Booking\SuggestedTimeRepository")
  */
 class SuggestedTime

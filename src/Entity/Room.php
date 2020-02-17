@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Room\Amenity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
  */
 class Room
@@ -16,11 +19,15 @@ class Room
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"all"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"all"})
      */
     private $name;
 
@@ -42,6 +49,8 @@ class Room
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Room\Amenity", inversedBy="rooms")
+     *
+     * @Groups({"all"})
      */
     private $amenities;
 

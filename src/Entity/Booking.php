@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Booking\SuggestedTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource(normalizationContext={"groups"={"all"}})
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
  */
 class Booking
@@ -16,42 +19,58 @@ class Booking
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"all"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Room", inversedBy="bookings")
+     *
+     * @Groups({"all"})
      */
     private $room;
 
     /**
      * @ORM\ManyToOne(targetEntity="BookingTable", inversedBy="bookings")
+     *
+     * @Groups({"all"})
      */
     private $tableBooking;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="bookings")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"all"})
      */
     private $user;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="invites")
+     *
+     * @Groups({"all"})
      */
     private $invitees;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Groups({"all"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Groups({"all"})
      */
     private $creationDate;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Booking\SuggestedTime", mappedBy="booking", orphanRemoval=true)
+     *
+     * @Groups({"all"})
      */
     private $suggestedTimes;
 
