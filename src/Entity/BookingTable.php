@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource()
+ * @ApiFilter(SearchFilter::class, properties={"area": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\TableRepository")
  */
 class BookingTable
@@ -21,14 +24,14 @@ class BookingTable
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Area", inversedBy="tables")
      */
     private $area;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Room", inversedBy="tables")
-     */
-    private $room;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Chair", mappedBy="ChairTable", orphanRemoval=true)
@@ -59,18 +62,6 @@ class BookingTable
     public function setArea(?Area $area): self
     {
         $this->area = $area;
-
-        return $this;
-    }
-
-    public function getRoom(): ?Room
-    {
-        return $this->room;
-    }
-
-    public function setRoom(?Room $room): self
-    {
-        $this->room = $room;
 
         return $this;
     }
@@ -135,5 +126,21 @@ class BookingTable
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
     }
 }

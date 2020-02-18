@@ -58,7 +58,14 @@ class Booking
      *
      * @Groups({"all"})
      */
-    private $date;
+    private $startDate;
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @Groups({"all"})
+     */
+    private $endDate;
 
     /**
      * @ORM\Column(type="datetime")
@@ -149,14 +156,26 @@ class Booking
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getStartDate(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->startDate;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setStartDate(\DateTimeInterface $startDate): self
     {
-        $this->date = $date;
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate($endDate): self
+    {
+        $this->endDate = $endDate;
 
         return $this;
     }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(routePrefix="/v2", normalizationContext={"groups"={"all"}})
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User
@@ -55,6 +55,11 @@ class User
      * @ORM\ManyToMany(targetEntity="App\Entity\Booking", mappedBy="invitees")
      */
     private $invites;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
 
     public function __construct()
     {
@@ -189,5 +194,21 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
     }
 }

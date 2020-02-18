@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Entity\Room\Amenity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
+ * @ApiFilter(SearchFilter::class, properties={"floor": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
  */
 class Room
@@ -36,11 +39,6 @@ class Room
      * @ORM\JoinColumn(nullable=false)
      */
     private $floor;
-
-    /**
-     * @ORM\OneToMany(targetEntity="BookingTable", mappedBy="room")
-     */
-    private $tables;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="room")
@@ -86,37 +84,6 @@ class Room
     public function setFloor(?Floor $floor): self
     {
         $this->floor = $floor;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|BookingTable[]
-     */
-    public function getTables(): Collection
-    {
-        return $this->tables;
-    }
-
-    public function addTable(BookingTable $table): self
-    {
-        if (!$this->tables->contains($table)) {
-            $this->tables[] = $table;
-            $table->setRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTable(BookingTable $table): self
-    {
-        if ($this->tables->contains($table)) {
-            $this->tables->removeElement($table);
-            // set the owning side to null (unless already changed)
-            if ($table->getRoom() === $this) {
-                $table->setRoom(null);
-            }
-        }
 
         return $this;
     }

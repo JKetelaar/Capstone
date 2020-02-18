@@ -30,7 +30,7 @@ class OverviewController extends AbstractController
             [
                 'bookings' => count($bookings),
                 'users' => count($users),
-                'last_booking' => $bookings[count($bookings) - 1]->getDate(),
+                'last_booking' => $bookings[count($bookings) - 1]->getStartDate(),
             ]
         );
     }
