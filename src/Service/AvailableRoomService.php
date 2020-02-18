@@ -89,6 +89,32 @@ class AvailableRoomService
         }
     }
 
+    public function getBookingsForDate(Room $room, DateTimeInterface $dateTime)
+    {
+        $bookings = [];
+        foreach ($room->getBookings() as $booking) {
+            if ($this->isDateBetweenDates($dateTime, clone $booking->getStartDate(), clone $booking->getEndDate())) {
+                $bookings[] = [
+                    'start' => $booking->getStartDate()->format('m/d/Y H:i'),
+                    'end' => $booking->getEndDate()->format('m/d/Y H:i'),
+                ];
+            }
+        }
+
+        return $bookings;
+    }
+
+    private function isDateBetweenDates(
+        DateTimeInterface $date,
+        DateTimeInterface $startDate,
+        DateTimeInterface $endDate
+    ) {
+        $startDate->setTime('0', '0');
+        $endDate->setTime('23', '59');
+
+        return $date > $startDate && $date < $endDate;
+    }
+
     /**
      * @param int $buildingId
      * @param Room\Amenity[] $amenities

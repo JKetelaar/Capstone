@@ -66,8 +66,19 @@ class AvailabilityController extends AbstractFOSRestController
             }
         }
 
+        $output = [];
         $rooms = $roomService->getAvailableRoomsForBuilding($building, $amenities);
 
-        return $this->handleView($this->view($rooms));
+        foreach ($rooms as $room) {
+            $output[] = [
+                'room' => $room->getName(),
+                'building' => $room->getFloor()->getBuilding()->getName(),
+                'floor' => $room->getFloor()->getFloor(),
+                'amenities' => $room->getAmenities(),
+                'bookings' => $roomService->getBookingsForDate($room, $startDate),
+            ];
+        }
+
+        return $this->handleView($this->view($output));
     }
 }
