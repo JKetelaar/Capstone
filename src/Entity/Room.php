@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups"={"all"}})
  * @ApiFilter(SearchFilter::class, properties={"floor": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
  */

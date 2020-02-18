@@ -2,38 +2,42 @@
 
 namespace App\Controller;
 
-use App\Entity\Room;
 use App\Service\AvailableRoomService;
+use DateTime;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BookRoomController
  * @package App\Controller
  * @Route("/available")
  */
-class BookRoomController extends AbstractFOSRestController
+class AvailabilityController extends AbstractFOSRestController
 {
     /**
-     * @Route("/rooms", name="available_rooms")
-     * @throws \Exception
+     * @Route("/rooms", name="available_rooms", methods={"POST"})
+     * @param Request $request
+     * @param AvailableRoomService $roomService
+     * @return Response
+     * @throws Exception
      */
-    public function availableRooms(Request $request)
+    public function availableRooms(Request $request, AvailableRoomService $roomService)
     {
         $floor = $request->get('floor');
         $date = $request->get('date');
         $startTime = $request->get('start_time');
         $endTime = $request->get('end_time');
 
-        $startDate = new \DateTime($date);
+        $startDate = new DateTime($date);
         $startDate->setTime($startTime['hour'], $startTime['minute']);
 
-        $endDate = new \DateTime($date);
+        $endDate = new DateTime($date);
         $endDate->setTime($endTime['hour'], $endTime['minute']);
 
-        $a = new AvailableRoomService($this->getDoctrine()->getRepository(Room::class));
-        $rooms = $a->getAvailableRoomsForFloor($floor, $startDate, $endDate);
+        $rooms = $roomService->getAvailableRoomsForFloor($floor, $startDate, $endDate);
 
         return $this->handleView($this->view($rooms));
     }

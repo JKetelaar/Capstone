@@ -7,6 +7,7 @@ namespace App\Service;
 
 use App\Entity\Room;
 use App\Repository\RoomRepository;
+use DateTimeInterface;
 
 class AvailableRoomService
 {
@@ -26,11 +27,11 @@ class AvailableRoomService
 
     /**
      * @param int $floorId
-     * @param \DateTimeInterface $startDate
-     * @param \DateTimeInterface $endDate
+     * @param DateTimeInterface $startDate
+     * @param DateTimeInterface $endDate
      * @return Room[]
      */
-    public function getAvailableRoomsForFloor(int $floorId, \DateTimeInterface $startDate, \DateTimeInterface $endDate)
+    public function getAvailableRoomsForFloor(int $floorId, DateTimeInterface $startDate, DateTimeInterface $endDate)
     {
         $availableRooms = [];
         $rooms = $this->roomRepository->findBy(['floor' => $floorId]);
@@ -53,23 +54,29 @@ class AvailableRoomService
     }
 
     /**
-     * @param $bookingStart \DateTimeInterface
-     * @param $bookingEnd \DateTimeInterface
-     * @param $startDate \DateTimeInterface
-     * @param $endDate \DateTimeInterface
+     * @param $bookingStart DateTimeInterface
+     * @param $bookingEnd DateTimeInterface
+     * @param $startDate DateTimeInterface
+     * @param $endDate DateTimeInterface
      * @return bool
+     * @noinspection PhpNonStrictObjectEqualityInspection
      */
     private function isFree($bookingStart, $bookingEnd, $startDate, $endDate)
     {
-        if ($bookingStart > $startDate && $bookingEnd < $endDate) { #-> Check time is in between start and end time
+        // Check time is in between start and end time
+        if ($bookingStart > $startDate && $bookingEnd < $endDate) {
             return false;
-        } elseif (($bookingStart > $startDate && $bookingStart < $endDate) || ($bookingEnd > $startDate && $bookingEnd < $endDate)) { #-> Check start or end time is in between start and end time
+        }// Check start or end time is in between start and end time
+        elseif (($bookingStart > $startDate && $bookingStart < $endDate) || ($bookingEnd > $startDate && $bookingEnd < $endDate)) {
             return false;
-        } elseif ($bookingStart == $startDate || $bookingEnd == $endDate) { #-> Check start or end time is at the border of start and end time
+        } // Check start or end time is at the border of start and end time
+        elseif ($bookingStart == $startDate || $bookingEnd == $endDate) {
             return false;
-        } elseif ($startDate > $bookingStart && $endDate < $bookingEnd) { #-> start and end time is in between  the check start and end time.
+        } // Start and end time is in between the check start and end time.
+        elseif ($startDate > $bookingStart && $endDate < $bookingEnd) {
             return false;
-        } else {
+        } // No matching time, booking is free
+        else {
             return true;
         }
     }
