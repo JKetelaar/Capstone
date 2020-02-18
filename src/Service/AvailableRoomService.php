@@ -6,6 +6,7 @@
 namespace App\Service;
 
 use App\Entity\Room;
+use App\Repository\BuildingRepository;
 use App\Repository\RoomRepository;
 use DateTimeInterface;
 
@@ -17,12 +18,19 @@ class AvailableRoomService
     private $roomRepository;
 
     /**
+     * @var BuildingRepository
+     */
+    private $buildingRepository;
+
+    /**
      * AvailableRoomService constructor.
      * @param RoomRepository $roomRepository
+     * @param BuildingRepository $buildingRepository
      */
-    public function __construct(RoomRepository $roomRepository)
+    public function __construct(RoomRepository $roomRepository, BuildingRepository $buildingRepository)
     {
         $this->roomRepository = $roomRepository;
+        $this->buildingRepository = $buildingRepository;
     }
 
     /**
@@ -79,5 +87,42 @@ class AvailableRoomService
         else {
             return true;
         }
+    }
+
+    /**
+     * @param int $buildingId
+     * @param Room\Amenity[] $amenities
+     * @return Room[]
+     */
+    public function getAvailableRoomsForBuilding(
+        int $buildingId,
+        array $amenities
+    ) {
+        $availableRooms = [];
+        foreach ($this->buildingRepository->find($buildingId)->getFloors() as $floor) {
+            foreach ($floor->getRooms() as $room) {
+                if (count($amenities) > 0) {
+
+                    $matches = 0;
+                    foreach ($room->getAmenities() as $roomAmenity) {
+                        foreach ($amenities as $amenity) {
+                            if ($amenity->getId() === $roomAmenity->getId()) {
+                                $matches++;
+                                break 1;
+                            }
+                        }
+                    }
+
+                    if ($matches === count($amenities)) {
+                        $availableRooms[] = $room;
+                    }
+
+                } else {
+                    $availableRooms[] = $room;
+                }
+            }
+        }
+
+        return $availableRooms;
     }
 }

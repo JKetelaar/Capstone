@@ -24,7 +24,7 @@ services:
         tags: ['controller.service_arguments']
 
     App\Service\AvailableRoomService:
-        arguments: ['@App\Repository\RoomRepository']
+        arguments: ['@App\Repository\RoomRepository', '@App\Repository\BuildingRepository']
 
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener

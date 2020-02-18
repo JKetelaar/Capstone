@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Room\Amenity;
 use App\Service\AvailableRoomService;
 use DateTime;
 use Exception;
@@ -38,6 +39,34 @@ class AvailabilityController extends AbstractFOSRestController
         $endDate->setTime($endTime['hour'], $endTime['minute']);
 
         $rooms = $roomService->getAvailableRoomsForFloor($floor, $startDate, $endDate);
+
+        return $this->handleView($this->view($rooms));
+    }
+
+    /**
+     * @Route("/options", name="option_rooms", methods={"POST"})
+     * @param Request $request
+     * @param AvailableRoomService $roomService
+     * @return Response
+     * @throws Exception
+     */
+    public function optionRooms(Request $request, AvailableRoomService $roomService)
+    {
+        $building = $request->get('building');
+
+        $date = $request->get('date');
+        $startDate = new DateTime($date);
+
+        $amenities = [];
+        $repository = $this->getDoctrine()->getRepository(Amenity::class);
+        foreach ($request->get('amenities') as $amenity) {
+            $roomAmenity = $repository->findOneBy(['name' => $amenity]);
+            if ($roomAmenity !== null) {
+                $amenities[] = $roomAmenity;
+            }
+        }
+
+        $rooms = $roomService->getAvailableRoomsForBuilding($building, $amenities);
 
         return $this->handleView($this->view($rooms));
     }
