@@ -6,9 +6,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups"={"all"}})
  * @ORM\Entity(repositoryClass="App\Repository\BuildingRepository")
  */
 class Building
@@ -17,21 +18,29 @@ class Building
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"all"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"all"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
+     *
+     * @Groups({"all"})
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="float")
+     *
+     * @Groups({"all"})
      */
     private $longitude;
 

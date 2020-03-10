@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Entity\Logs;
 use App\Entity\Room;
 use App\Entity\User;
 use DateTime;
@@ -53,9 +54,18 @@ class RoomOverviewController extends AbstractFOSRestController
         $booking->setRoom($doctrine->getRepository(Room::class)->findOneBy(['id' => $room]));
         $booking->setStartDate($startDate);
         $booking->setEndDate($endDate);
-        $booking->setUser($doctrine->getRepository(User::class)->findAll()[0]);
+        $booking->setUser($doctrine->getRepository(User::class)->find($request->get('user')));
 
         $doctrine->getManager()->persist($booking);
+
+        $log = new Logs();
+        $log->setDescription(
+            'Room '.$booking->getRoom()->getName().' on Floor '.$booking->getRoom()->getFloor()->getFloor(
+            ).' in Building '.$booking->getRoom()->getFloor()->getBuilding()->getName(
+            ).' booked for '.$startDate->format('H').'-'.$endDate->format('H')
+        );
+        $doctrine->getManager()->persist($log);
+
         $doctrine->getManager()->flush();
 
         return $this->handleView($this->view($booking));

@@ -34,19 +34,24 @@ class BookingTable
     private $area;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Chair", mappedBy="ChairTable", orphanRemoval=true)
-     */
-    private $chairs;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="tableBooking")
      */
     private $bookings;
 
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $mapLocation = [];
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="bookingTable", orphanRemoval=true)
+     */
+    private $reservations;
+
     public function __construct()
     {
-        $this->chairs = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,37 +67,6 @@ class BookingTable
     public function setArea(?Area $area): self
     {
         $this->area = $area;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Chair[]
-     */
-    public function getChairs(): Collection
-    {
-        return $this->chairs;
-    }
-
-    public function addChair(Chair $chair): self
-    {
-        if (!$this->chairs->contains($chair)) {
-            $this->chairs[] = $chair;
-            $chair->setChairTable($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChair(Chair $chair): self
-    {
-        if ($this->chairs->contains($chair)) {
-            $this->chairs->removeElement($chair);
-            // set the owning side to null (unless already changed)
-            if ($chair->getChairTable() === $this) {
-                $chair->setChairTable(null);
-            }
-        }
 
         return $this;
     }
@@ -142,5 +116,48 @@ class BookingTable
     public function setName($name): void
     {
         $this->name = $name;
+    }
+
+    public function getMapLocation(): ?array
+    {
+        return $this->mapLocation;
+    }
+
+    public function setMapLocation(?array $mapLocation): self
+    {
+        $this->mapLocation = $mapLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setBookingTable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->contains($reservation)) {
+            $this->reservations->removeElement($reservation);
+            // set the owning side to null (unless already changed)
+            if ($reservation->getBookingTable() === $this) {
+                $reservation->setBookingTable(null);
+            }
+        }
+
+        return $this;
     }
 }
