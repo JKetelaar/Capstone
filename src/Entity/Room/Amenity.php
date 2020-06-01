@@ -32,7 +32,7 @@ class Amenity
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @Groups({"all"})
      */

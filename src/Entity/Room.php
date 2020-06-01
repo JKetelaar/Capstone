@@ -37,6 +37,8 @@ class Room
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Floor", inversedBy="rooms")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"all"})
      */
     private $floor;
 

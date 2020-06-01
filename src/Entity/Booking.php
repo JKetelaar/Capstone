@@ -4,15 +4,15 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Entity\Booking\SuggestedTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
- * @ApiResource(normalizationContext={"groups"={"all"}})
+ * @ApiResource(normalizationContext={"groups"={"all"}}, attributes={"order"={"id": "DESC"}})
  * @ApiFilter(SearchFilter::class, properties={"user": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
  */
@@ -181,6 +181,26 @@ class Booking
         $this->endDate = $endDate;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     *
+     * @Groups("all")
+     */
+    public function getWebStartDate()
+    {
+        return $this->startDate->format('M/d/Y H:i');
+    }
+
+    /**
+     * @return string
+     *
+     * @Groups("all")
+     */
+    public function getWebEndDate()
+    {
+        return $this->endDate->format('M/d/Y H:i');
     }
 
     public function getCreationDate(): ?\DateTimeInterface

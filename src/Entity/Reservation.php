@@ -40,6 +40,11 @@ class Reservation
      */
     private $checkoutDate;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $emailedAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +94,18 @@ class Reservation
     public function setCheckoutDate(?\DateTimeInterface $checkoutDate): self
     {
         $this->checkoutDate = $checkoutDate;
+
+        return $this;
+    }
+
+    public function getEmailedAt(): ?\DateTimeInterface
+    {
+        return $this->emailedAt;
+    }
+
+    public function setEmailedAt(?\DateTimeInterface $emailedAt): self
+    {
+        $this->emailedAt = $emailedAt;
 
         return $this;
     }

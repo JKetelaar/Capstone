@@ -8,9 +8,10 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups"={"all"}})
  * @ApiFilter(SearchFilter::class, properties={"area": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\TableRepository")
  */
@@ -20,16 +21,22 @@ class BookingTable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"all"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"all"})
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Area", inversedBy="tables")
+     *
+     * @Groups({"all"})
      */
     private $area;
 
@@ -48,10 +55,27 @@ class BookingTable
      */
     private $reservations;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AIReport", mappedBy="bookingTable", orphanRemoval=true)
+     */
+    private $aiReports;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     *
+     * @Groups({"all"})
+     */
+    private $occupied;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->aiReports = new ArrayCollection();
+
+        $this->occupied = false;
     }
 
     public function getId(): ?int
@@ -159,5 +183,83 @@ class BookingTable
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|AIReport[]
+     */
+    public function getAiReports(): Collection
+    {
+        return $this->aiReports;
+    }
+
+    public function addAiReport(AIReport $aiReport): self
+    {
+        if (!$this->aiReports->contains($aiReport)) {
+            $this->aiReports[] = $aiReport;
+            $aiReport->setBookingTable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAiReport(AIReport $aiReport): self
+    {
+        if ($this->aiReports->contains($aiReport)) {
+            $this->aiReports->removeElement($aiReport);
+            // set the owning side to null (unless already changed)
+            if ($aiReport->getBookingTable() === $this) {
+                $aiReport->setBookingTable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @Groups({"all"})
+     *
+     * @return bool
+     */
+    public function isUnknown()
+    {
+        /** @var Reservation $reservation */
+        if (count($this->reservations) === 0) {
+            return true;
+        }
+
+        if ($this->isOccupied()) {
+            $count = 0;
+            foreach ($this->reservations as $reservation) {
+                if ($reservation->getCheckoutDate() !== null && $reservation->getUser() === null) {
+                    return true;
+                }
+                if ($reservation->getCheckoutDate() !== null) {
+                    $count++;
+                }
+            }
+
+            if ($count === count($this->reservations)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOccupied(): bool
+    {
+        return $this->occupied;
+    }
+
+    /**
+     * @param bool $occupied
+     */
+    public function setOccupied(bool $occupied): void
+    {
+        $this->occupied = $occupied;
     }
 }

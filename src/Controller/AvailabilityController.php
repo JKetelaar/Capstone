@@ -71,6 +71,7 @@ class AvailabilityController extends AbstractFOSRestController
 
         foreach ($rooms as $room) {
             $output[] = [
+                'id' => $room->getId(),
                 'room' => $room->getName(),
                 'building' => $room->getFloor()->getBuilding()->getName(),
                 'floor' => $room->getFloor()->getFloor(),
